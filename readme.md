@@ -18,3 +18,12 @@
 * Use `wasd` to rotate the cube
 * Click on a tile to remove it from the scene
 * Right click on a tile to flag it
+
+## Todo
+- [ ] Create game that wraps around cube
+- [ ] Keep track of remaining free tiles to be revealed
+- [ ] Show win message once all free tiles have been revealed
+- [ ] Show all bombs on a loss
+- [ ] Add a timer
+- [ ] Add a mine density slider
+- [ ] Add a board size slider
