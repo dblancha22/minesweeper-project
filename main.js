@@ -65,7 +65,6 @@ function onPointerMove( event ) {
 
 function removeTile() {
     if (intersected) {
-        console.log(intersected);
         intersected.parent.remove(intersected);
     }
 }
