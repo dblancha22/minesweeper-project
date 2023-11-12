@@ -186,8 +186,14 @@ function animate() {
 
     intersects = raycaster.intersectObjects( scene.children );
     if (intersects.length > 0) {
+        if (intersected)
+            intersected.material.color.setHex( 0xffffff );
         intersected = intersects[0].object;
+        intersected.material.color.setHex( 0xfadadd );
     } else {
+        if (intersected)
+            intersected.material.color.setHex( 0xffffff );
+
         intersected = null;
     }
 
