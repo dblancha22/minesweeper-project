@@ -93,11 +93,12 @@ function onPointerMove( event ) {
 
 function removeTile(e) {
     e.preventDefault();
-    if (intersected)
-        intersected.data.revealed = true;
-    if (intersected && intersected.data.bomb) {
+    if (!intersected || !intersected.data)
+        return;
+
+    intersected.data.revealed = true;
+    if (intersected.data.bomb) {
         alert("Game Over");
-        intersected.material.color.set( 0xffffff );
     }
 }
 
@@ -136,7 +137,6 @@ function animate() {
 
     intersects = raycaster.intersectObjects( scene.children );
     if (intersects.length > 0) {
-        // console.log(intersects);
         intersected = intersects[0].object;
     } else {
         intersected = null;

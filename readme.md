@@ -7,6 +7,8 @@
 * Run `npx vite`
 * Navigate to the url that `npx vite` provides
     * It should be `localhost:xxxx`, where `xxxx` is a 4-digit port number
+* The hot-reload function is broken and duplicates files
+    * After every change to the code, go to the terminal running the server and press `r` to restart it
 
 ## Game Settings
 * The game size can currently be adjusted using the `game_size` variable in `main.js`
@@ -15,3 +17,4 @@
 ## Playing
 * Use `wasd` to rotate the cube
 * Click on a tile to remove it from the scene
+* Right click on a tile to flag it
