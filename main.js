@@ -17,14 +17,14 @@ const pointer = new THREE.Vector2();
 let intersected;
 
 var game = new THREE.Group();
-export let game_size = 5;
+export let game_size = 10;
 var tiles = [];
+
+const textures = [];
 
 function createTileGroup(rx, ry, rz) {
     const tile_group = new THREE.Group();
     const tile_size = 1 / game_size;
-    const tile_geometry = new THREE.BoxGeometry( tile_size - 0.01, tile_size - 0.01, 0);
-    const tile_material = new THREE.MeshBasicMaterial( { color: 0x0000ff, transparent: true } );
 
     let spacing = tile_size;
     let spacing_start = -0.5 + (tile_size / 2);
@@ -36,7 +36,9 @@ function createTileGroup(rx, ry, rz) {
     let count = 0;
     for (let i = spacing_start; i <= spacing_end; i += spacing) {
         for (let j = spacing_start; j <= spacing_end; j += spacing) {
-            let tile = new THREE.Mesh( tile_geometry.clone(), tile_material.clone() );
+            const tile_geometry = new THREE.BoxGeometry( tile_size, tile_size, 0);
+            const tile_material = new THREE.MeshBasicMaterial( { transparent: true } );
+            let tile = new THREE.Mesh( tile_geometry, tile_material );
 
             tile.data = minesweeper_game[x][y];
             tile.position.x = i;
@@ -61,15 +63,19 @@ function createTileGroup(rx, ry, rz) {
 function colorTiles(tile_group) {
     for (let i = 0; i < tile_group.children.length; i++) {
         let tile = tile_group.children[i];
-        if (tile.data.bomb)
-            tile.material.color.set( 0xff0000 );
-        else
-            tile.material.color.set( 0x0000ff );
+        if (tile.data.bomb) {
+            tile.material.map = textures[9];
+        }
+        else {
+            tile.material.map = textures[11];
+        }
 
-        if (tile.data.revealed)
-            tile.material.opacity = 0.0;
-        if (tile.data.flagged)
-            tile.material.color.set( 0xFFA500 );
+        if (tile.data.revealed) {
+            tile.material.map = textures[tile.data.adjacent];
+        }
+        if (tile.data.flagged) {
+            tile.material.map = textures[10];
+        }
     }
 }
 
@@ -120,7 +126,24 @@ function rotateGame(e) {
     }
 }
 
+function loadTextures() {
+    const loader = new THREE.TextureLoader();
+    textures.push(loader.load('textures/TileEmpty.png'));
+    textures.push(loader.load('textures/Tile1.png'));
+    textures.push(loader.load('textures/Tile2.png'));
+    textures.push(loader.load('textures/Tile3.png'));
+    textures.push(loader.load('textures/Tile4.png'));
+    textures.push(loader.load('textures/Tile5.png'));
+    textures.push(loader.load('textures/Tile6.png'));
+    textures.push(loader.load('textures/Tile7.png'));
+    textures.push(loader.load('textures/Tile8.png'));
+    textures.push(loader.load('textures/TileBomb.png'));
+    textures.push(loader.load('textures/TileFlag.png'));
+    textures.push(loader.load('textures/TileUnknown.png'));
+}
+
 function setupGame() {
+    loadTextures();
     const base_geometry = new THREE.BoxGeometry( 1, 1, 1 );
     const base_material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
     const base = new THREE.Mesh( base_geometry, base_material );

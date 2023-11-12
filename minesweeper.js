@@ -2,7 +2,7 @@ import { game_size } from "./main.js";
 
 
 export function generate_game() {
-    let mine_density = 0.3;
+    let mine_density = 0.2;
     let game = [];
     for (let i = 0; i < game_size; i++) {
         let row = [];
