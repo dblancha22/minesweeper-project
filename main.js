@@ -102,6 +102,32 @@ function removeTile(e) {
     if (!intersected || !intersected.data)
         return;
 
+    let board = intersected.parent.board;
+    // ripple reveal
+    let queue = [intersected.data];
+    while (queue.length > 0) {
+        let tile = queue.shift();
+        tile.revealed = true;
+        if (tile.adjacent === 0) {
+            for (let x = -1; x <= 1; x++) {
+                let row = tile.x + x;
+                if (row < 0 || row >= game_size) {
+                    continue;
+                }
+                for (let y = -1; y <= 1; y++) {
+                    let col = tile.y + y;
+                    if (col < 0 || col >= game_size) {
+                        continue;
+                    }
+                    let neighbor = board[row][col];
+                    if (!neighbor.revealed) {
+                        queue.push(neighbor);
+                    }
+                }
+            }
+        }
+    }
+
     intersected.data.revealed = true;
     if (intersected.data.bomb) {
         alert("Game Over");
