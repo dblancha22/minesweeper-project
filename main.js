@@ -15,15 +15,21 @@ const pointer = new THREE.Vector2();
 let intersected;
 
 var game = new THREE.Group();
+let game_size = 8;
 var tiles = [];
 
 function createTileGroup(rx, ry, rz) {
     const tile_group = new THREE.Group();
-    const tile_geometry = new THREE.BoxGeometry(0.09, 0.09, 0);
+    const tile_size = 1 / game_size;
+    const tile_geometry = new THREE.BoxGeometry( tile_size - 0.01, tile_size - 0.01, 0);
     const tile_material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
 
-    for (let i = -0.40; i <= 0.45; i += 0.1) {
-        for (let j = -0.40; j <= 0.45; j += 0.1) {
+    let spacing = tile_size;
+    let spacing_start = -0.5 + (tile_size / 2);
+    let spacing_end = 0.5;
+
+    for (let i = spacing_start; i <= spacing_end; i += spacing) {
+        for (let j = spacing_start; j <= spacing_end; j += spacing) {
             const tile = new THREE.Mesh( tile_geometry.clone(), tile_material.clone() );
             tile.position.x = i;
             tile.position.y = j;
