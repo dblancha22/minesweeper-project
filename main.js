@@ -76,6 +76,78 @@ function colorTiles(tile_group) {
         if (tile.data.flagged) {
             tile.material.map = textures[10];
         }
+
+        if (tile.data.revealed && tile.data.bomb) {
+            tile.material.map = textures[12];
+        }
+    }
+}
+
+function placeTileSetAdjacent(a, b, a_side, b_side) {
+    // bottom = 0, #
+    // top = game_size - 1, #
+    // left = #, 0
+    // right = #, game_size - 1
+
+}
+
+function placeTileSetLeft(left_tiles, right_tiles) {
+    // left = 0#
+    // right = game_size - 1#
+
+    // left = 0 + i
+    // right = (game_size-1)*game_size + i
+
+    // we merge the left tiles on their right side with the right tiles on their left side
+
+    let right_column = (game_size-1)*game_size;
+
+    for (let i = 0; i < game_size; i++) {
+        let left = left_tiles.children[right_column + i];
+        // get the three tiles to the right of the left tile
+        let right = right_tiles.children[i];
+        let top = (i + 1 < game_size) ? right_tiles.children[i + 1] : null;
+        let bottom = (i > 0) ? right_tiles.children[i - 1] : null;
+
+        // update the bomb count in each tile
+        if (right) {
+            left.data.adjacent += right.data.bomb ? 1 : 0;
+            right.data.adjacent += left.data.bomb ? 1 : 0;
+        }
+        if (top) {
+            left.data.adjacent += top.data.bomb ? 1 : 0;
+            top.data.adjacent += left.data.bomb ? 1 : 0;
+        }
+        if (bottom) {
+            left.data.adjacent += bottom.data.bomb ? 1 : 0;
+            bottom.data.adjacent += left.data.bomb ? 1 : 0;
+        }
+    }
+}
+
+function placeTileSetBottom(bottom_tiles, top_tiles) {
+    for (let i = 0 ; i < game_size; i++) {
+        let bottom = top_tiles.children[(game_size)*i];
+
+        let top_pos = i*(game_size) + game_size - 1;
+
+        let top = bottom_tiles.children[top_pos];
+        let left = (top_pos - game_size > game_size-1) ? bottom_tiles.children[top_pos - game_size] : null;
+        let right = (top_pos + game_size < game_size*game_size) ? bottom_tiles.children[top_pos + game_size] : null;
+
+        if (top) {
+            bottom.data.adjacent += top.data.bomb ? 1 : 0;
+            top.data.adjacent += bottom.data.bomb ? 1 : 0;
+        }
+        if (left) {
+            bottom.data.adjacent += left.data.bomb ? 1 : 0;
+            left.data.adjacent += bottom.data.bomb ? 1 : 0;
+        }
+        if (right) {
+            bottom.data.adjacent += right.data.bomb ? 1 : 0;
+            right.data.adjacent += bottom.data.bomb ? 1 : 0;
+        }
+
     }
 }
 
@@ -87,7 +159,13 @@ function generateTiles() {
     let top = createTileGroup(-Math.PI / 2, 0, 0);
     let bottom = createTileGroup(Math.PI / 2, 0, 0);
 
-    // tiles.push(front);
+    placeTileSetLeft(left, front);
+    placeTileSetLeft(front, right);
+    placeTileSetLeft(right, back);
+    placeTileSetLeft(back, left);
+
+    placeTileSetBottom(bottom, front);
+
     tiles.push(front, left, right, back, top, bottom);
     tiles.forEach(tile => game.add(tile));
 }
@@ -102,7 +180,14 @@ function removeTile(e) {
     if (!intersected || !intersected.data)
         return;
 
+    intersected.data.revealed = true;
+    if (intersected.data.bomb) {
+        alert("Game Over");
+        return;
+    }
+
     let board = intersected.parent.board;
+    //
     // ripple reveal
     let queue = [intersected.data];
     while (queue.length > 0) {
@@ -128,10 +213,6 @@ function removeTile(e) {
         }
     }
 
-    intersected.data.revealed = true;
-    if (intersected.data.bomb) {
-        alert("Game Over");
-    }
 }
 
 function toggleFlag(e) {
@@ -166,6 +247,7 @@ function loadTextures() {
     textures.push(loader.load('textures/TileBomb.png'));
     textures.push(loader.load('textures/TileFlag.png'));
     textures.push(loader.load('textures/TileUnknown.png'));
+    textures.push(loader.load('textures/TileExploded.png'));
 }
 
 function setupGame() {
