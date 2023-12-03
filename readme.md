@@ -21,9 +21,20 @@
 
 ## Todo
 - [ ] Create game that wraps around cube
+    - [x] Left-Right Horizontal
+    - [ ] Left-right vertical
+    - [ ] Up-down vertical
+- [ ] Update BFS reveal to traverse faces
+- [ ] Change game to generate on click instead of page load
+    - [ ] First click should have all 9 squares around it revealed at least -- BFS reveal the rest
+- [ ] Allow resetting/restarting the game after loss
 - [ ] Keep track of remaining free tiles to be revealed
 - [ ] Show win message once all free tiles have been revealed
 - [ ] Show all bombs on a loss
-- [ ] Add a timer
+- [ ] Add a timer -- stop it on loss or win
 - [ ] Add a mine density slider
 - [ ] Add a board size slider
+- [ ] Add a skybox for a background
+- [ ] Add lighting
+- [ ] Add sound effects (remove tile, loss, win, flag, multiple-tile break)
+- [ ] Add soundtrack

@@ -187,6 +187,7 @@ function removeTile(e) {
     }
 
     let board = intersected.parent.board;
+    console.log(intersected.data.x, intersected.data.y);
     //
     // ripple reveal
     let queue = [intersected.data];
