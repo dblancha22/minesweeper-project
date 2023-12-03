@@ -27,6 +27,7 @@
 - [ ] Update BFS reveal to traverse faces
 - [ ] Change game to generate on click instead of page load
     - [ ] First click should have all 9 squares around it revealed at least -- BFS reveal the rest
+        * Will probably require the games to be generated with a BFS too
 - [ ] Allow resetting/restarting the game after loss
 - [ ] Keep track of remaining free tiles to be revealed
 - [ ] Show win message once all free tiles have been revealed
