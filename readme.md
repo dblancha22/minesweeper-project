@@ -35,7 +35,7 @@
 - [ ] Add a timer -- stop it on loss or win
 - [ ] Add a mine density slider
 - [ ] Add a board size slider
-- [ ] Add a skybox for a background
+- [x] Add a skybox for a background
 - [ ] Add lighting
 - [ ] Add sound effects (remove tile, loss, win, flag, multiple-tile break)
 - [ ] Add soundtrack
