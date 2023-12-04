@@ -17,6 +17,7 @@ const pointer = new THREE.Vector2();
 let intersected;
 
 var game = new THREE.Group();
+var skydome;
 export let game_size = 10;
 var tiles = [];
 
@@ -101,7 +102,6 @@ function placeTileSetLeft(left_tiles, right_tiles) {
     // we merge the left tiles on their right side with the right tiles on their left side
 
     let right_column = (game_size-1)*game_size;
-
     for (let i = 0; i < game_size; i++) {
         let left = left_tiles.children[right_column + i];
         // get the three tiles to the right of the left tile
@@ -249,6 +249,7 @@ function loadTextures() {
     textures.push(loader.load('textures/TileFlag.png'));
     textures.push(loader.load('textures/TileUnknown.png'));
     textures.push(loader.load('textures/TileExploded.png'));
+    textures.push(loader.load('textures/skydome.jpg'));
 }
 
 function setupGame() {
@@ -259,6 +260,13 @@ function setupGame() {
     game.add( base );
     generateTiles();
 
+    const sphere_geometry = new THREE.SphereGeometry( 25, 32, 32 );
+    const sphere_material = new THREE.MeshBasicMaterial( { side: THREE.BackSide } );
+    skydome = new THREE.Mesh( sphere_geometry, sphere_material );
+    skydome.rotation.x = Math.PI / 2;
+    skydome.material.map = textures[13];
+
+    scene.add( skydome );
     scene.add( game );
     setups++;
 }
@@ -268,16 +276,11 @@ function animate() {
     raycaster.setFromCamera( pointer, camera );
 
     intersects = raycaster.intersectObjects( scene.children );
-    if (intersects.length > 0) {
+    if (intersects.length > 0 && intersects[0].object != skydome) {
         if (intersected)
             intersected.material.color.setHex( 0xffffff );
         intersected = intersects[0].object;
         intersected.material.color.setHex( 0xfadadd );
-    } else {
-        if (intersected)
-            intersected.material.color.setHex( 0xffffff );
-
-        intersected = null;
     }
 
     tiles.forEach(tile => colorTiles(tile));
