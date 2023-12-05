@@ -406,6 +406,14 @@ function onPointerMove( event ) {
 	pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 }
 
+function revealAllTiles() {
+    tiles.forEach(tile => {
+        tile.children.forEach(child => {
+            child.data.revealed = true;
+        });
+    });
+}
+
 function removeTile(e) {
     e.preventDefault();
     if (!intersected || !intersected.data || intersected.data.revealed)
@@ -413,6 +421,7 @@ function removeTile(e) {
 
     intersected.data.revealed = true;
     if (intersected.data.bomb) {
+        revealAllTiles();
         alert("Game Over");
         return;
     }
