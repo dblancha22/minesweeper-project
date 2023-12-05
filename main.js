@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import { generate_game } from './minesweeper.js';
+import { generate_game, getRemainingTiles, setRemainingTiles } from './minesweeper.js';
+
 
 let setups = 0;
 
@@ -180,6 +181,11 @@ function removeTile(e) {
     if (!intersected || !intersected.data)
         return;
 
+    if (intersected.data.revealed === false && intersected.data.bomb === false) {
+        setRemainingTiles(getRemainingTiles() - 1); // Update using setter
+        updateRemainingTilesDisplay();
+    }
+
     intersected.data.revealed = true;
     if (intersected.data.bomb) {
         alert("Game Over");
@@ -286,6 +292,11 @@ function animate() {
     tiles.forEach(tile => colorTiles(tile));
 
 	renderer.render( scene, camera );
+}
+
+function updateRemainingTilesDisplay() {
+    const displayElement = document.getElementById('remainingTilesDisplay');
+    displayElement.textContent = `Remaining Tiles: ${getRemainingTiles()}`; // Use getter
 }
 
 window.addEventListener( 'pointermove', onPointerMove );

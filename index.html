@@ -5,10 +5,26 @@
         <title>My first three.js app</title>
         <style>
             body { margin: 0; }
+            #remainingTilesDisplay {
+                font-size: 18px; /* Adjust font size */
+                color: #333; /* Font color */
+                background-color: #f0f0f0; /* Background color */
+                border: 1px solid #ddd; /* Border properties */
+                padding: 10px; /* Inner spacing */
+                margin: 10px; /* Outer spacing */
+                border-radius: 5px; /* Rounded corners */
+                text-align: center; /* Centered text */
+                width: 200px; /* Width of the element */
+                position: fixed; /* Fixed position */
+                top: 10px; /* Distance from the top of the page */
+                right: 10px; /* Distance from the right of the page */
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            }
         </style>
     </head>
     <body>
         <script type="module" src="./main.js"></script>
         <script type="module" src="./minesweeper.js"></script>
+        <div id="remainingTilesDisplay">Remaining Tiles: N/A</div>
     </body>
 </html>
