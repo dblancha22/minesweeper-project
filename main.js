@@ -140,31 +140,235 @@ function placeTileSetLeft(left_tiles, right_tiles) {
     }
 }
 
-function placeTileSetBottom(bottom_tiles, top_tiles) {
-    for (let i = 0 ; i < game_size; i++) {
-        let bottom = top_tiles.children[(game_size)*i];
+// function placeTileSetBottom(bottom_tiles, top_tiles) {
+//     for (let i = 0 ; i < game_size; i++) {
+//         let bottom = top_tiles.children[(game_size)*i];
 
-        let top_pos = i*(game_size) + game_size - 1;
+//         let top_pos = i*(game_size) + game_size - 1;
 
-        let top = bottom_tiles.children[top_pos];
-        let left = (top_pos - game_size > game_size-1) ? bottom_tiles.children[top_pos - game_size] : null;
-        let right = (top_pos + game_size < game_size*game_size) ? bottom_tiles.children[top_pos + game_size] : null;
+//         let top = bottom_tiles.children[top_pos];
+//         let left = (top_pos - game_size > game_size-1) ? bottom_tiles.children[top_pos - game_size] : null;
+//         let right = (top_pos + game_size < game_size*game_size) ? bottom_tiles.children[top_pos + game_size] : null;
 
+//         if (top) {
+//             bottom.data.adjacent += top.data.bomb ? 1 : 0;
+//             top.data.adjacent += bottom.data.bomb ? 1 : 0;
+//         }
+//         if (left) {
+//             bottom.data.adjacent += left.data.bomb ? 1 : 0;
+//             left.data.adjacent += bottom.data.bomb ? 1 : 0;
+//         }
+//         if (right) {
+//             bottom.data.adjacent += right.data.bomb ? 1 : 0;
+//             right.data.adjacent += bottom.data.bomb ? 1 : 0;
+//         }
+
+//     }
+// }
+
+function placeTopFront(top_tile, front_tile) {
+
+    for (let i = 0; i < game_size; i++ ) {
+
+        // game_size * i
+        let bot = front_tile.children[(game_size * i)+(game_size-1)];
+        // get the three tiles to the top of the bottom tile
+        let top = top_tile.children[game_size * i];
+        let left = (i > 0) ? top_tile.children[(game_size * (i-1))] : null;
+        let right = (i + 1 < game_size) ? top_tile.children[(game_size * (i+1))] : null;
+    
         if (top) {
-            bottom.data.adjacent += top.data.bomb ? 1 : 0;
-            top.data.adjacent += bottom.data.bomb ? 1 : 0;
+            bot.data.adjacent += top.data.bomb ? 1 : 0;
+            top.data.adjacent += bot.data.bomb? 1 : 0;
         }
-        if (left) {
-            bottom.data.adjacent += left.data.bomb ? 1 : 0;
-            left.data.adjacent += bottom.data.bomb ? 1 : 0;
+        if (left){
+            bot.data.adjacent += left.data.bomb ? 1 : 0;
+            left.data.adjacent += bot.data.bomb ? 1 : 0;
         }
         if (right) {
-            bottom.data.adjacent += right.data.bomb ? 1 : 0;
-            right.data.adjacent += bottom.data.bomb ? 1 : 0;
+            bot.data.adjacent += right.data.bomb ? 1 : 0;
+            right.data.adjacent += bot.data.bomb ? 1 : 0;
         }
+        // 
+        // let topt = top_tile.children[]
 
     }
 }
+
+function placeTopBack(top_tile, back_tile) {
+    for (let i = 0; i < game_size; i++) {
+
+        // let back = back_tile[(game_size * (game_size-i-1))+(game_size-1)];
+        let back = back_tile.children[((game_size-i-1)*game_size)+(game_size-1)];
+
+
+        let top = top_tile.children[game_size * i + (game_size -1)];
+        let left = (i > 0) ? top_tile.children[(game_size * (i-1))+ (game_size -1)] : null;
+        let right = (i + 1 < game_size) ? top_tile.children[(game_size * (i+1))+ (game_size -1)] : null;
+
+        if (top) {
+            back.data.adjacent += top.data.bomb ? 1 : 0;
+            top.data.adjacent += back.data.bomb? 1 : 0;
+        }
+        if (left){
+            back.data.adjacent += left.data.bomb ? 1 : 0;
+            left.data.adjacent += back.data.bomb ? 1 : 0;
+        }
+        if (right) {
+            back.data.adjacent += right.data.bomb ? 1 : 0;
+            right.data.adjacent += back.data.bomb ? 1 : 0;
+        }
+    }
+}
+
+function placeBotBack(bot_tile, back_tile) {
+    for (let i = 0; i < game_size; i++) {
+
+        // let back = back_tile[(game_size * (game_size-i-1))+(game_size-1)];
+        let back = back_tile.children[i*game_size];
+
+
+        let top = bot_tile.children[(game_size -i -1)*game_size];
+        let left = (i > 0) ? bot_tile.children[game_size*(game_size-i)] : null;
+        let right = (i + 1 < game_size) ? bot_tile.children[game_size*(game_size-i-2)] : null;
+
+        if (top) {
+            back.data.adjacent += top.data.bomb ? 1 : 0;
+            top.data.adjacent += back.data.bomb? 1 : 0;
+        }
+        if (left){
+            back.data.adjacent += left.data.bomb ? 1 : 0;
+            left.data.adjacent += back.data.bomb ? 1 : 0;
+        }
+        if (right) {
+            back.data.adjacent += right.data.bomb ? 1 : 0;
+            right.data.adjacent += back.data.bomb ? 1 : 0;
+        }
+    }
+}
+
+function placeBotFront(bot_tile, front_tile) {
+    for (let i = 0; i < game_size; i++) {
+
+        // let front = front_tile.children[i*game_size];
+        let front = front_tile.children[i*game_size];
+
+        let top = bot_tile.children[(i*game_size)+(game_size-1)];
+        let left = (i > 0) ? bot_tile.children[((i-1)*game_size)+(game_size-1)] : null;
+        let right = (i + 1 < game_size) ? bot_tile.children[((i+1)*game_size)+(game_size-1)] : null;
+
+        if (top) {
+            front.data.adjacent += top.data.bomb ? 1 : 0;
+            top.data.adjacent += front.data.bomb? 1 : 0;
+        }
+        if (left){
+            front.data.adjacent += left.data.bomb ? 1 : 0;
+            left.data.adjacent += front.data.bomb ? 1 : 0;
+        }
+        if (right) {
+            front.data.adjacent += right.data.bomb ? 1 : 0;
+            right.data.adjacent += front.data.bomb ? 1 : 0;
+        }
+    }
+}
+
+function placeTopRight(top_tile, right_tile) {
+    for (let i = 0; i < game_size; i++) {
+
+        let top = top_tile.children[(game_size *(game_size-1)) + i];
+
+        let bot = right_tile.children[(game_size*i) +(game_size -1)];
+        let left = (i > 0) ? right_tile.children[(game_size*(i-1))+(game_size-1)] : null;
+        let right = (i + 1 < game_size) ? right_tile.children[(game_size*(i+1)) + (game_size-1)] : null;
+
+        if (bot) {
+            top.data.adjacent += bot.data.bomb ? 1 : 0;
+            bot.data.adjacent += top.data.bomb? 1 : 0;
+        }
+        if (left){
+            top.data.adjacent += left.data.bomb ? 1 : 0;
+            left.data.adjacent += top.data.bomb ? 1 : 0;
+        }
+        if (right) {
+            top.data.adjacent += right.data.bomb ? 1 : 0;
+            right.data.adjacent += top.data.bomb ? 1 : 0;
+        }
+    }
+}
+
+function placeTopLeft(top_tile, left_tile) {
+    for (let i = 0; i < game_size; i++) {
+
+        let top = top_tile.children[i];
+
+        let bot = left_tile.children[((game_size-1-i)*game_size) + (game_size-1)];
+        let left = (i > 0) ? left_tile.children[((game_size-i)*game_size) + (game_size-1)] : null;
+        let right = (i + 1 < game_size) ? left_tile.children[((game_size-2-i)*game_size) + (game_size-1)] : null;
+
+        if (bot) {
+            top.data.adjacent += bot.data.bomb ? 1 : 0;
+            bot.data.adjacent += top.data.bomb? 1 : 0;
+        }
+        if (left){
+            top.data.adjacent += left.data.bomb ? 1 : 0;
+            left.data.adjacent += top.data.bomb ? 1 : 0;
+        }
+        if (right) {
+            top.data.adjacent += right.data.bomb ? 1 : 0;
+            right.data.adjacent += top.data.bomb ? 1 : 0;
+        }
+    }
+}
+
+function placeBotRight(bot_tile, right_tile) {
+    for (let i = 0; i < game_size; i++) {
+
+        let bot = bot_tile.children[((game_size-1)*game_size)+(game_size-i-1)];
+
+        let top = right_tile.children[game_size*i];
+        let left = (i > 0) ? right_tile.children[game_size*(i-1)] : null;
+        let right = (i + 1 < game_size) ? right_tile.children[game_size*(i+1)] : null;
+
+        if (top) {
+            bot.data.adjacent += top.data.bomb ? 1 : 0;
+            top.data.adjacent += bot.data.bomb? 1 : 0;
+        }
+        if (left){
+            bot.data.adjacent += left.data.bomb ? 1 : 0;
+            left.data.adjacent += bot.data.bomb ? 1 : 0;
+        }
+        if (right) {
+            bot.data.adjacent += right.data.bomb ? 1 : 0;
+            right.data.adjacent += bot.data.bomb ? 1 : 0;
+        }
+    }
+}
+
+function placeBotLeft(bot_tile, left_tile) {
+    for (let i = 0; i < game_size; i++) {
+
+        let bot = bot_tile.children[i];
+
+        let top = left_tile.children[game_size*i];
+        let left = (i > 0) ? left_tile.children[game_size*(i-1)] : null;
+        let right = (i + 1 < game_size) ? left_tile.children[game_size*(i+1)] : null;
+
+        if (top) {
+            bot.data.adjacent += top.data.bomb ? 1 : 0;
+            top.data.adjacent += bot.data.bomb? 1 : 0;
+        }
+        if (left){
+            bot.data.adjacent += left.data.bomb ? 1 : 0;
+            left.data.adjacent += bot.data.bomb ? 1 : 0;
+        }
+        if (right) {
+            bot.data.adjacent += right.data.bomb ? 1 : 0;
+            right.data.adjacent += bot.data.bomb ? 1 : 0;
+        }
+    }
+}
+
+
 
 function generateTiles() {
     let front = createTileGroup(0, 0, 0);
@@ -179,7 +383,18 @@ function generateTiles() {
     placeTileSetLeft(right, back);
     placeTileSetLeft(back, left);
 
-    placeTileSetBottom(bottom, front);
+    placeTopFront(top, front);
+    placeTopBack(top, back);
+    placeBotBack(bottom, back);
+    placeBotFront(bottom, front);
+
+    placeTopRight(top, right);
+    placeTopLeft(top, left);
+    placeBotRight(bottom, right);
+    placeBotLeft(bottom, left);
+
+
+    // placeTileSetBottom(bottom, front);
 
     tiles.push(front, left, right, back, top, bottom);
     tiles.forEach(tile => game.add(tile));
