@@ -38,4 +38,4 @@
 - [x] Add a skybox for a background
 - [ ] Add lighting
 - [ ] Add sound effects (remove tile, loss, win, flag, multiple-tile break)
-- [ ] Add soundtrack
+- [x] Add soundtrack
