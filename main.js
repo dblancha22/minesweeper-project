@@ -8,6 +8,21 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 camera.position.z = 2;
 
+const listener = new THREE.AudioListener();
+camera.add( listener );
+
+// create a global audio source
+const sound = new THREE.Audio( listener );
+
+// load a sound and set it as the Audio object's buffer
+const audioLoader = new THREE.AudioLoader();
+audioLoader.load( 'audio/ambient.mp3', function( buffer ) {
+	sound.setBuffer( buffer );
+	sound.setLoop( true );
+	sound.setVolume( 0.5 );
+	sound.play();
+});
+
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
@@ -171,13 +186,14 @@ function generateTiles() {
 }
 
 function onPointerMove( event ) {
+    listener.context.resume();
 	pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 	pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 }
 
 function removeTile(e) {
     e.preventDefault();
-    if (!intersected || !intersected.data)
+    if (!intersected || !intersected.data || intersected.data.revealed)
         return;
 
     intersected.data.revealed = true;
@@ -186,12 +202,26 @@ function removeTile(e) {
         return;
     }
 
+    // load a sound and set it as the Audio object's buffer
+    const break_sound = new THREE.Audio( listener );
+
+    audioLoader.load( 'audio/break.mp3', function( buffer ) {
+        break_sound.setBuffer( buffer );
+        break_sound.setVolume( 0.5 );
+        break_sound.play();
+    });
+
     let board = intersected.parent.board;
     console.log(intersected.data.x, intersected.data.y);
     //
     // ripple reveal
     let queue = [intersected.data];
+    let played = false;
     while (queue.length > 0) {
+        if (!played) {
+            sound.play();
+            played = true;
+        }
         let tile = queue.shift();
         tile.revealed = true;
         if (tile.adjacent === 0) {
