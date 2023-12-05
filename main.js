@@ -181,46 +181,49 @@ function removeTile(e) {
     if (!intersected || !intersected.data)
         return;
 
-    if (intersected.data.revealed === false && intersected.data.bomb === false) {
-        setRemainingTiles(getRemainingTiles() - 1); // Update using setter
-        updateRemainingTilesDisplay();
-    }
-
-    intersected.data.revealed = true;
-    if (intersected.data.bomb) {
-        alert("Game Over");
+    if (intersected.data.revealed || intersected.data.bomb)
         return;
-    }
 
-    let board = intersected.parent.board;
-    console.log(intersected.data.x, intersected.data.y);
-    //
-    // ripple reveal
-    let queue = [intersected.data];
-    while (queue.length > 0) {
-        let tile = queue.shift();
-        tile.revealed = true;
-        if (tile.adjacent === 0) {
-            for (let x = -1; x <= 1; x++) {
-                let row = tile.x + x;
-                if (row < 0 || row >= game_size) {
-                    continue;
-                }
-                for (let y = -1; y <= 1; y++) {
-                    let col = tile.y + y;
-                    if (col < 0 || col >= game_size) {
-                        continue;
-                    }
-                    let neighbor = board[row][col];
-                    if (!neighbor.revealed) {
-                        queue.push(neighbor);
+    let tilesToReveal = [intersected.data];
+    let revealedCount = 0;
+
+    while (tilesToReveal.length > 0) {
+        let tile = tilesToReveal.shift();
+
+        if (!tile.revealed) {
+            tile.revealed = true;
+            revealedCount++;
+
+            if (tile.adjacent === 0) {
+                // Get all adjacent tiles
+                for (let x = -1; x <= 1; x++) {
+                    for (let y = -1; y <= 1; y++) {
+                        let adjX = tile.x + x;
+                        let adjY = tile.y + y;
+
+                        // Check bounds
+                        if (adjX < 0 || adjX >= game_size || adjY < 0 || adjY >= game_size)
+                            continue;
+
+                        let adjTile = intersected.parent.board[adjX][adjY];
+                        if (!adjTile.revealed && !adjTile.bomb) {
+                            tilesToReveal.push(adjTile);
+                        }
                     }
                 }
             }
         }
     }
 
+    setRemainingTiles(getRemainingTiles() - revealedCount); // Update the remaining tile count
+    updateRemainingTilesDisplay();
+
+    if (intersected.data.bomb) {
+        alert("Game Over");
+        // Additional game over logic
+    }
 }
+
 
 function toggleFlag(e) {
     e.preventDefault();
