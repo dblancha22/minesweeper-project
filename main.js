@@ -99,14 +99,6 @@ function colorTiles(tile_group) {
     }
 }
 
-function placeTileSetAdjacent(a, b, a_side, b_side) {
-    // bottom = 0, #
-    // top = game_size - 1, #
-    // left = #, 0
-    // right = #, game_size - 1
-
-}
-
 function placeTileSetLeft(left_tiles, right_tiles) {
     // left = 0#
     // right = game_size - 1#
@@ -139,32 +131,6 @@ function placeTileSetLeft(left_tiles, right_tiles) {
         }
     }
 }
-
-// function placeTileSetBottom(bottom_tiles, top_tiles) {
-//     for (let i = 0 ; i < game_size; i++) {
-//         let bottom = top_tiles.children[(game_size)*i];
-
-//         let top_pos = i*(game_size) + game_size - 1;
-
-//         let top = bottom_tiles.children[top_pos];
-//         let left = (top_pos - game_size > game_size-1) ? bottom_tiles.children[top_pos - game_size] : null;
-//         let right = (top_pos + game_size < game_size*game_size) ? bottom_tiles.children[top_pos + game_size] : null;
-
-//         if (top) {
-//             bottom.data.adjacent += top.data.bomb ? 1 : 0;
-//             top.data.adjacent += bottom.data.bomb ? 1 : 0;
-//         }
-//         if (left) {
-//             bottom.data.adjacent += left.data.bomb ? 1 : 0;
-//             left.data.adjacent += bottom.data.bomb ? 1 : 0;
-//         }
-//         if (right) {
-//             bottom.data.adjacent += right.data.bomb ? 1 : 0;
-//             right.data.adjacent += bottom.data.bomb ? 1 : 0;
-//         }
-
-//     }
-// }
 
 function placeTopFront(top_tile, front_tile) {
 
