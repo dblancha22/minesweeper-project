@@ -18,7 +18,9 @@ let intersected;
 
 var game = new THREE.Group();
 var skydome;
-export let game_size = 10;
+export let bomb_count = 0;
+export let mine_density = .15;
+export let game_size = 16;
 var tiles = [];
 
 const textures = [];
@@ -288,12 +290,35 @@ function animate() {
 	renderer.render( scene, camera );
 }
 
+function update_density(){
+    mine_density = document.getElementById("Density").value;
+    document.getElementById("bombs").textContent = mine_density.toString();
+    // console.log(mine_density);
+}
+
+function update_size(){
+    game_size = document.getElementById("Board Size").value;
+    document.getElementById("Board").textContent = game_size.toString();
+    // console.log(game_size);
+}
+
+function start_game(){
+    bomb_count = Math.round(game_size * game_size * mine_density);
+    console.log(bomb_count);
+    setupGame();
+    console.log("Setups: " + setups);
+    animate();
+}
+
+document.getElementById("Start").addEventListener('click', start_game);
+document.getElementById("Board Size").addEventListener('change', update_size);
+document.getElementById("Density").addEventListener('change', update_density);
+
+
 window.addEventListener( 'pointermove', onPointerMove );
 window.addEventListener('click', removeTile);
 window.addEventListener('keydown', rotateGame);
 window.addEventListener('contextmenu', toggleFlag);
 
-setupGame();
-console.log("Setups: " + setups);
-animate();
+
 

@@ -10,5 +10,39 @@
     <body>
         <script type="module" src="./main.js"></script>
         <script type="module" src="./minesweeper.js"></script>
+<div style="z-index: 100; position: absolute;">
+        <form action="">
+            <label>
+                Board Size: &nbsp; &nbsp; 8
+            </label>
+            <input type="range" id="Board Size" min="8" max="24" value="16" step="1" id="red">
+            <label>
+                24
+            </label>
+        </form>
+        <p style="margin-left: 50px;">
+            <text id="Board"> 
+                16
+            </text>
+        </p>
+        <form action="">
+            <label>
+                Bomb Density: &nbsp; &nbsp;.05
+            </label>
+            <input type="range" id="Density" min=".05" max=".25" value=".15" step=".05" id="red">
+            <label>
+                .25
+            </label>
+        </form>
+        <p style="margin-left: 50px;">
+            <text id="bombs">
+                .15
+            </text>
+        </p>
+        <form action="">
+            <input type="button" value="Start" id="Start">
+        </form>
+
+</div>
     </body>
 </html>

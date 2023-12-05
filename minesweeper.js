@@ -1,8 +1,11 @@
-import { game_size } from "./main.js";
+import { bomb_count, game_size } from "./main.js";
+import { mine_density } from "./main.js";
 
 
 export function generate_game() {
-    let mine_density = 0.2;
+    //let mine_density = document.getElementById("Density").value;
+    // let count = Math.round(game_size*game_size * mine_density);
+    //console.log(count);
     let game = [];
     for (let i = 0; i < game_size; i++) {
         let row = [];
@@ -20,6 +23,8 @@ export function generate_game() {
         }
         game.push(row);
     }
+
+    game = make_bombs(game, bomb_count);
 
     // Calculate adjacent bombs
     for (let i = 0; i < game_size; i++) {
@@ -49,5 +54,26 @@ export function generate_game() {
         }
     }
 
+    return game;
+}
+
+
+export function make_bombs(game, count) {
+    //let mine_density = document.getElementById("Density").value;
+    //let count = Math.round(game_size * game_size * mine_density);
+    for (let i = 0; i < game_size; i++) {
+        for (let j = 0; j < game_size; j++) {
+            let tile = game[i][j];
+            if (tile.bomb == 1 || tile.revealed == true || count == 0) {
+                continue;
+            } else {
+                let is_bomb = Math.random() < mine_density;
+                tile.bomb = is_bomb;
+                if (is_bomb == 1){
+                    count--;
+                }
+            }
+        }
+    }
     return game;
 }
