@@ -12,7 +12,7 @@ export function generate_game() {
                 bomb: is_bomb,
                 revealed: false,
                 flagged: false,
-                adjacent: 0,
+                adjacent: [],
                 x: i,
                 y: j
             };
@@ -29,7 +29,7 @@ export function generate_game() {
                 continue;
             }
 
-            let adjacent = 0;
+            // let adjacent = 0;
             for (let x = -1; x <= 1; x++) {
                 let row = i + x;
                 if (row < 0 || row >= game_size) {
@@ -40,12 +40,11 @@ export function generate_game() {
                     if (col < 0 || col >= game_size) {
                         continue;
                     }
-                    if (game[row][col].bomb) {
-                        adjacent++;
-                    }
+
+                    tile.adjacent.push(game[row][col]);
                 }
             }
-            tile.adjacent = adjacent;
+            // tile.adjacent = adjacent;
         }
     }
 
