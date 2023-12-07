@@ -33,7 +33,7 @@ let intersected;
 
 var game = new THREE.Group();
 var skydome;
-export let game_size = 10;
+export let game_size = 2;
 var tiles = [];
 
 var timer_started = false;
@@ -41,6 +41,7 @@ var start_time = Date.now();
 
 let total_bombs = 0;
 let total_flags = 0;
+let remaining_tiles = game_size * game_size * 6;
 
 const textures = [];
 
@@ -493,7 +494,6 @@ function removeTile(e) {
     });
 
     let board = intersected.parent.board;
-    console.log(intersected.data.x, intersected.data.y);
     //
     // ripple reveal
     let queue = [intersected.data];
@@ -506,7 +506,7 @@ function removeTile(e) {
 
         visited.add(tile);
         tile.revealed = true;
-
+        remaining_tiles--;
         if (tile.bomb_adj_count === 0) {
             for (let i = 0; i < tile.adjacent.length; i++) {
                 let adj = tile.adjacent[i];
@@ -515,35 +515,9 @@ function removeTile(e) {
         }
     }
 
-    // let queue = [intersected.data];
-    // let played = false;
-    // while (queue.length > 0) {
-    //     if (!played) {
-    //         sound.play();
-    //         played = true;
-    //     }
-    //     let tile = queue.shift();
-    //     tile.revealed = true;
-    //     if (tile.adjacent === 0) {
-    //         for (let x = -1; x <= 1; x++) {
-    //             let row = tile.x + x;
-    //             if (row < 0 || row >= game_size) {
-    //                 continue;
-    //             }
-    //             for (let y = -1; y <= 1; y++) {
-    //                 let col = tile.y + y;
-    //                 if (col < 0 || col >= game_size) {
-    //                     continue;
-    //                 }
-    //                 let neighbor = board[row][col];
-    //                 if (!neighbor.revealed) {
-    //                     queue.push(neighbor);
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
+    if (remaining_tiles === total_bombs) {
+        alert("You Win!");
+    }
 }
 
 function toggleFlag(e) {
