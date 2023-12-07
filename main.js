@@ -33,7 +33,7 @@ let intersected;
 
 var game = new THREE.Group();
 var skydome;
-export let game_size = 2;
+export let game_size = 10;
 var tiles = [];
 
 var timer_started = false;
@@ -480,6 +480,7 @@ function removeTile(e) {
     intersected.data.revealed = true;
     if (intersected.data.bomb) {
         revealAllTiles();
+        timer_started = false;
         alert("Game Over");
         return;
     }
@@ -516,6 +517,7 @@ function removeTile(e) {
     }
 
     if (remaining_tiles === total_bombs) {
+        timer_started = false;
         alert("You Win!");
     }
 }
