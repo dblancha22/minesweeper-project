@@ -1,7 +1,8 @@
 import * as THREE from 'three';
-import { generate_game } from './minesweeper.js';
+import { generate_game, place_bombs } from './minesweeper.js';
 
 let setups = 0;
+let game_started = false;
 
 let intersects;
 const scene = new THREE.Scene();
@@ -45,6 +46,8 @@ let remaining_tiles = game_size * game_size * 6;
 
 const textures = [];
 
+let front, left, right, back, top, bottom;
+
 function createTileGroup(rx, ry, rz) {
     const tile_group = new THREE.Group();
     const tile_size = 1 / game_size;
@@ -80,6 +83,7 @@ function createTileGroup(rx, ry, rz) {
     tile_group.rotation.z = rz;
 
     tile_group.board = minesweeper_game;
+
     return tile_group;
 }
 
@@ -217,7 +221,6 @@ function placeBotBack(bot_tile, back_tile) {
 
         // let back = back_tile[(game_size * (game_size-i-1))+(game_size-1)];
         let back = back_tile.children[i*game_size];
-
 
         let top = bot_tile.children[(game_size -i -1)*game_size];
         let left = (i > 0) ? bot_tile.children[game_size*(game_size-i)] : null;
@@ -398,12 +401,12 @@ function placeBotLeft(bot_tile, left_tile) {
 
 
 function generateTiles() {
-    let front = createTileGroup(0, 0, 0);
-    let left = createTileGroup(0, -Math.PI / 2, 0);
-    let right = createTileGroup(0, Math.PI / 2, 0);
-    let back = createTileGroup(0, Math.PI, 0);
-    let top = createTileGroup(-Math.PI / 2, 0, 0);
-    let bottom = createTileGroup(Math.PI / 2, 0, 0);
+    front = createTileGroup(0, 0, 0);
+    left = createTileGroup(0, -Math.PI / 2, 0);
+    right = createTileGroup(0, Math.PI / 2, 0);
+    back = createTileGroup(0, Math.PI, 0);
+    top = createTileGroup(-Math.PI / 2, 0, 0);
+    bottom = createTileGroup(Math.PI / 2, 0, 0);
 
     placeTileSetLeft(left, front);
     placeTileSetLeft(front, right);
@@ -419,8 +422,6 @@ function generateTiles() {
     placeTopLeft(top, left);
     placeBotRight(bottom, right);
     placeBotLeft(bottom, left);
-
-    calcBombs(front);
 
     tiles.push(front, left, right, back, top, bottom);
     tiles.forEach(tile => game.add(tile));
@@ -472,6 +473,26 @@ function removeTile(e) {
     if (!intersected || !intersected.data || intersected.data.revealed)
         return;
 
+    if (!game_started) {
+        game_started = true;
+        console.log("Game started");
+        // reserve the tiles around the first tile clicked
+        intersected.data.reserved = true;
+        for (let i = 0; i < intersected.data.adjacent.length; i++) {
+            intersected.data.adjacent[i].reserved = true;
+        }
+
+        // place bombs
+        place_bombs(front);
+        place_bombs(left);
+        place_bombs(right);
+        place_bombs(back);
+        place_bombs(top);
+        place_bombs(bottom);
+
+        calcBombs(front);
+    }
+  
     if (!timer_started) {
         timer_started = true;
         start_time = Date.now();
