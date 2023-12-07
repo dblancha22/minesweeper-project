@@ -48,8 +48,7 @@ export function place_bombs(tile_group) {
     let board = tile_group.board;
     let bomb_count = board.bomb_count;
 
-    let max_bombs = Math.floor(board.length * board.length * 0.15);
-    console.log(bomb_count, max_bombs);
+    let max_bombs = Math.floor(game_size * game_size * 0.15);
 
     while (bomb_count < max_bombs) {
         let x = Math.floor(Math.random() * board.length);
@@ -61,5 +60,6 @@ export function place_bombs(tile_group) {
         }
     }
 
+    console.log("Bombs placed: " + bomb_count);
     tile_group.bomb_count = bomb_count;
 }

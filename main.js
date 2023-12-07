@@ -90,12 +90,9 @@ function createTileGroup(rx, ry, rz) {
 function colorTiles(tile_group) {
     for (let i = 0; i < tile_group.children.length; i++) {
         let tile = tile_group.children[i];
-        if (tile.data.bomb) {
-            tile.material.map = textures[9];
-        }
-        else {
+
+        if (!tile.data.revealed && !tile.data.flagged)
             tile.material.map = textures[11];
-        }
 
         if (tile.data.revealed) {
             tile.material.map = textures[tile.data.bomb_adj_count];
@@ -467,14 +464,12 @@ function revealAllTiles() {
     });
 }
 
-function removeTile(e) {
-    e.preventDefault();
+function start_game() {
     if (!intersected || !intersected.data || intersected.data.revealed)
         return;
 
     if (!game_started) {
         game_started = true;
-        console.log("Game started");
         // reserve the tiles around the first tile clicked
         intersected.data.reserved = true;
         for (let i = 0; i < intersected.data.adjacent.length; i++) {
@@ -491,6 +486,16 @@ function removeTile(e) {
 
         calcBombs(front);
     }
+}
+
+function removeTile(e) {
+    e.preventDefault();
+    if (!intersected || !intersected.data || intersected.data.revealed)
+        return;
+
+    if (!game_started) {
+        start_game();
+    }
   
     if (!timer_started) {
         timer_started = true;
@@ -501,7 +506,10 @@ function removeTile(e) {
     if (intersected.data.bomb) {
         revealAllTiles();
         timer_started = false;
-        alert("Game Over");
+        let play_again = confirm("You Lose! Play Again?");
+        if (play_again) {
+            restart_game();
+        }
         return;
     }
 
@@ -539,6 +547,10 @@ function removeTile(e) {
     if (remaining_tiles === total_bombs) {
         timer_started = false;
         alert("You Win!");
+        let play_again = confirm("Play Again?");
+        if (play_again) {
+            restart_game();
+        }
     }
 }
 
@@ -590,16 +602,11 @@ function loadTextures() {
 }
 
 function setupGame() {
-    // const base_geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    // const base_material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-    // const base = new THREE.Mesh( base_geometry, base_material );
-    // game.add( base );
     game_started = false;
     timer_started = false;
     tiles = [];
     game = new THREE.Group();
-    total_bombs = 0;
-    total_flags = 0;
+    remaining_tiles = game_size * game_size * 6;
     generateTiles();
 
     const sphere_geometry = new THREE.SphereGeometry( 25, 32, 32 );
