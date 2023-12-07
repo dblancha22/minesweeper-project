@@ -60,6 +60,5 @@ export function place_bombs(tile_group) {
         }
     }
 
-    console.log("Bombs placed: " + bomb_count);
     tile_group.bomb_count = bomb_count;
 }

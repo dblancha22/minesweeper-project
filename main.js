@@ -682,5 +682,4 @@ document.getElementById("difficulty").addEventListener("change", function() {
 
 loadTextures();
 setupGame();
-console.log("Setups: " + setups);
 animate();
