@@ -32,13 +32,13 @@ const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 let intersected;
 
-var game = new THREE.Group();
+var game;
 var skydome;
 export let game_size = 10;
 var tiles = [];
 
 var timer_started = false;
-var start_time = Date.now();
+var start_time = 0;
 
 let total_bombs = 0;
 let total_flags = 0;
@@ -69,7 +69,7 @@ function createTileGroup(rx, ry, rz) {
             tile.data = minesweeper_game[x][y];
             tile.position.x = i;
             tile.position.y = j;
-            tile.position.z = 0.501;
+            tile.position.z = 0.5;
 
             tile_group.add(tile);
             x++;
@@ -455,7 +455,6 @@ function calcBombs(tile_group) {
 }
 
 function onPointerMove( event ) {
-    listener.context.resume();
 	pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 	pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 }
@@ -591,11 +590,16 @@ function loadTextures() {
 }
 
 function setupGame() {
-    loadTextures();
-    const base_geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    const base_material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-    const base = new THREE.Mesh( base_geometry, base_material );
-    game.add( base );
+    // const base_geometry = new THREE.BoxGeometry( 1, 1, 1 );
+    // const base_material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+    // const base = new THREE.Mesh( base_geometry, base_material );
+    // game.add( base );
+    game_started = false;
+    timer_started = false;
+    tiles = [];
+    game = new THREE.Group();
+    total_bombs = 0;
+    total_flags = 0;
     generateTiles();
 
     const sphere_geometry = new THREE.SphereGeometry( 25, 32, 32 );
@@ -619,6 +623,10 @@ function animate() {
             intersected.material.color.setHex( 0xffffff );
         intersected = intersects[0].object;
         intersected.material.color.setHex( 0xfadadd );
+    } else {
+        if (intersected)
+            intersected.material.color.setHex( 0xffffff );
+        intersected = null;
     }
 
     // update timer every second in seconds
@@ -641,7 +649,28 @@ window.addEventListener('click', removeTile);
 window.addEventListener('keydown', rotateGame);
 window.addEventListener('contextmenu', toggleFlag);
 
+document.getElementById("difficulty").addEventListener("change", function() {
+    let difficulty = document.getElementById("difficulty").value;
+    switch (difficulty) {
+        case "easy":
+            game_size = 5;
+            break;
+        case "medium":
+            game_size = 10;
+            break;
+        case "hard":
+            game_size = 20;
+            break;
+        default:
+            game_size = 10;
+            break;
+    }
+
+    scene.clear();
+    setupGame();
+});
+
+loadTextures();
 setupGame();
 console.log("Setups: " + setups);
 animate();
-
