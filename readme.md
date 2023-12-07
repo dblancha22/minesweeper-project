@@ -29,10 +29,10 @@
     - [ ] First click should have all 9 squares around it revealed at least -- BFS reveal the rest
         * Will probably require the games to be generated with a BFS too
 - [ ] Allow resetting/restarting the game after loss
-- [ ] Keep track of remaining free tiles to be revealed
-- [ ] Show win message once all free tiles have been revealed
+- [x] Keep track of remaining free tiles to be revealed
+- [x] Show win message once all free tiles have been revealed
 - [x] Show all bombs on a loss
-- [ ] Add a timer -- stop it on loss or win
+- [x] Add a timer -- stop it on loss or win
 - [ ] Add a mine density slider
 - [ ] Add a board size slider
 - [x] Add a skybox for a background
