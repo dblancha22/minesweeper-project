@@ -644,6 +644,11 @@ function animate() {
 	renderer.render( scene, camera );
 }
 
+function restart_game() {
+    scene.clear();
+    setupGame();
+}
+
 window.addEventListener( 'pointermove', onPointerMove );
 window.addEventListener('click', removeTile);
 window.addEventListener('keydown', rotateGame);
@@ -665,9 +670,7 @@ document.getElementById("difficulty").addEventListener("change", function() {
             game_size = 10;
             break;
     }
-
-    scene.clear();
-    setupGame();
+    restart_game();
 });
 
 loadTextures();
