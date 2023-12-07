@@ -26,7 +26,7 @@
     - [x] Up-down vertical
 - [x] Update BFS reveal to traverse faces
 - [x] Change game to generate on click instead of page load
-- [ ] Allow resetting/restarting the game after loss
+- [x] Allow resetting/restarting the game after loss
 - [x] Keep track of remaining free tiles to be revealed
 - [x] Show win message once all free tiles have been revealed
 - [x] Show all bombs on a loss
