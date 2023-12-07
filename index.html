@@ -3,11 +3,15 @@
     <head>
         <meta charset="utf-8">
         <title>My first three.js app</title>
-        <style>
-            body { margin: 0; }
-        </style>
+        <link rel="stylesheet" href="./style.css">
     </head>
     <body>
+        <div id="display-container">
+            <div id="display">
+                <p id="time">Time: <span id="time_value">0</span></p>
+                <p id="flags">Flags: <span id="flags_value">0</span></p>
+            </div>
+        </div>
         <script type="module" src="./main.js"></script>
         <script type="module" src="./minesweeper.js"></script>
     </body>
