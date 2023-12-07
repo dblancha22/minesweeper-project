@@ -25,16 +25,14 @@
     - [x] Left-right vertical
     - [x] Up-down vertical
 - [x] Update BFS reveal to traverse faces
-- [ ] Change game to generate on click instead of page load
-    - [ ] First click should have all 9 squares around it revealed at least -- BFS reveal the rest
-        * Will probably require the games to be generated with a BFS too
+- [x] Change game to generate on click instead of page load
 - [ ] Allow resetting/restarting the game after loss
 - [x] Keep track of remaining free tiles to be revealed
 - [x] Show win message once all free tiles have been revealed
 - [x] Show all bombs on a loss
 - [x] Add a timer -- stop it on loss or win
-- [ ] Add a mine density slider
-- [ ] Add a board size slider
+- [x] Add a mine density slider
+- [x] Add a board size slider
 - [x] Add a skybox for a background
 - [ ] Add lighting
 - [ ] Add sound effects (remove tile, loss, win, flag, multiple-tile break)
