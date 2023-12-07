@@ -24,7 +24,7 @@
     - [x] Left-Right Horizontal
     - [x] Left-right vertical
     - [x] Up-down vertical
-- [ ] Update BFS reveal to traverse faces
+- [x] Update BFS reveal to traverse faces
 - [ ] Change game to generate on click instead of page load
     - [ ] First click should have all 9 squares around it revealed at least -- BFS reveal the rest
         * Will probably require the games to be generated with a BFS too

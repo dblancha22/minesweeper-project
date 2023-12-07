@@ -87,7 +87,7 @@ function colorTiles(tile_group) {
         }
 
         if (tile.data.revealed) {
-            tile.material.map = textures[tile.data.adjacent];
+            tile.material.map = textures[tile.data.bomb_adj_count];
         }
         if (tile.data.flagged) {
             tile.material.map = textures[10];
@@ -118,16 +118,22 @@ function placeTileSetLeft(left_tiles, right_tiles) {
 
         // update the bomb count in each tile
         if (right) {
-            left.data.adjacent += right.data.bomb ? 1 : 0;
-            right.data.adjacent += left.data.bomb ? 1 : 0;
+            // left.data.adjacent += right.data.bomb ? 1 : 0;
+            // right.data.adjacent += left.data.bomb ? 1 : 0;
+            left.data.adjacent.push(right.data);
+            right.data.adjacent.push(left.data);
         }
         if (top) {
-            left.data.adjacent += top.data.bomb ? 1 : 0;
-            top.data.adjacent += left.data.bomb ? 1 : 0;
+            // left.data.adjacent += top.data.bomb ? 1 : 0;
+            // top.data.adjacent += left.data.bomb ? 1 : 0;
+            left.data.adjacent.push(top.data);
+            top.data.adjacent.push(left.data);
         }
         if (bottom) {
-            left.data.adjacent += bottom.data.bomb ? 1 : 0;
-            bottom.data.adjacent += left.data.bomb ? 1 : 0;
+            // left.data.adjacent += bottom.data.bomb ? 1 : 0;
+            // bottom.data.adjacent += left.data.bomb ? 1 : 0;
+            left.data.adjacent.push(bottom.data);
+            bottom.data.adjacent.push(left.data);
         }
     }
 }
@@ -144,16 +150,22 @@ function placeTopFront(top_tile, front_tile) {
         let right = (i + 1 < game_size) ? top_tile.children[(game_size * (i+1))] : null;
     
         if (top) {
-            bot.data.adjacent += top.data.bomb ? 1 : 0;
-            top.data.adjacent += bot.data.bomb? 1 : 0;
+            // bot.data.adjacent += top.data.bomb ? 1 : 0;
+            // top.data.adjacent += bot.data.bomb? 1 : 0;
+            bot.data.adjacent.push(top.data);
+            top.data.adjacent.push(bot.data);
         }
         if (left){
-            bot.data.adjacent += left.data.bomb ? 1 : 0;
-            left.data.adjacent += bot.data.bomb ? 1 : 0;
+            // bot.data.adjacent += left.data.bomb ? 1 : 0;
+            // left.data.adjacent += bot.data.bomb ? 1 : 0;
+            bot.data.adjacent.push(left.data);
+            left.data.adjacent.push(bot.data);
         }
         if (right) {
-            bot.data.adjacent += right.data.bomb ? 1 : 0;
-            right.data.adjacent += bot.data.bomb ? 1 : 0;
+            // bot.data.adjacent += right.data.bomb ? 1 : 0;
+            // right.data.adjacent += bot.data.bomb ? 1 : 0;
+            bot.data.adjacent.push(right.data);
+            right.data.adjacent.push(bot.data);
         }
         // 
         // let topt = top_tile.children[]
@@ -173,16 +185,22 @@ function placeTopBack(top_tile, back_tile) {
         let right = (i + 1 < game_size) ? top_tile.children[(game_size * (i+1))+ (game_size -1)] : null;
 
         if (top) {
-            back.data.adjacent += top.data.bomb ? 1 : 0;
-            top.data.adjacent += back.data.bomb? 1 : 0;
+            // back.data.adjacent += top.data.bomb ? 1 : 0;
+            // top.data.adjacent += back.data.bomb? 1 : 0;
+            top.data.adjacent.push(back.data);
+            back.data.adjacent.push(top.data);
         }
         if (left){
-            back.data.adjacent += left.data.bomb ? 1 : 0;
-            left.data.adjacent += back.data.bomb ? 1 : 0;
+            // back.data.adjacent += left.data.bomb ? 1 : 0;
+            // left.data.adjacent += back.data.bomb ? 1 : 0;
+            left.data.adjacent.push(back.data);
+            back.data.adjacent.push(left.data);
         }
         if (right) {
-            back.data.adjacent += right.data.bomb ? 1 : 0;
-            right.data.adjacent += back.data.bomb ? 1 : 0;
+            // back.data.adjacent += right.data.bomb ? 1 : 0;
+            // right.data.adjacent += back.data.bomb ? 1 : 0;
+            right.data.adjacent.push(back.data);
+            back.data.adjacent.push(right.data);
         }
     }
 }
@@ -199,16 +217,22 @@ function placeBotBack(bot_tile, back_tile) {
         let right = (i + 1 < game_size) ? bot_tile.children[game_size*(game_size-i-2)] : null;
 
         if (top) {
-            back.data.adjacent += top.data.bomb ? 1 : 0;
-            top.data.adjacent += back.data.bomb? 1 : 0;
+            // back.data.adjacent += top.data.bomb ? 1 : 0;
+            // top.data.adjacent += back.data.bomb? 1 : 0;
+            top.data.adjacent.push(back.data);
+            back.data.adjacent.push(top.data);
         }
         if (left){
-            back.data.adjacent += left.data.bomb ? 1 : 0;
-            left.data.adjacent += back.data.bomb ? 1 : 0;
+            // back.data.adjacent += left.data.bomb ? 1 : 0;
+            // left.data.adjacent += back.data.bomb ? 1 : 0;
+            left.data.adjacent.push(back.data);
+            back.data.adjacent.push(left.data);
         }
         if (right) {
-            back.data.adjacent += right.data.bomb ? 1 : 0;
-            right.data.adjacent += back.data.bomb ? 1 : 0;
+            // back.data.adjacent += right.data.bomb ? 1 : 0;
+            // right.data.adjacent += back.data.bomb ? 1 : 0;
+            right.data.adjacent.push(back.data);
+            back.data.adjacent.push(right.data);
         }
     }
 }
@@ -224,16 +248,22 @@ function placeBotFront(bot_tile, front_tile) {
         let right = (i + 1 < game_size) ? bot_tile.children[((i+1)*game_size)+(game_size-1)] : null;
 
         if (top) {
-            front.data.adjacent += top.data.bomb ? 1 : 0;
-            top.data.adjacent += front.data.bomb? 1 : 0;
+            // front.data.adjacent += top.data.bomb ? 1 : 0;
+            // top.data.adjacent += front.data.bomb? 1 : 0;
+            top.data.adjacent.push(front.data);
+            front.data.adjacent.push(top.data);
         }
         if (left){
-            front.data.adjacent += left.data.bomb ? 1 : 0;
-            left.data.adjacent += front.data.bomb ? 1 : 0;
+            // front.data.adjacent += left.data.bomb ? 1 : 0;
+            // left.data.adjacent += front.data.bomb ? 1 : 0;
+            left.data.adjacent.push(front.data);
+            front.data.adjacent.push(left.data);
         }
         if (right) {
-            front.data.adjacent += right.data.bomb ? 1 : 0;
-            right.data.adjacent += front.data.bomb ? 1 : 0;
+            // front.data.adjacent += right.data.bomb ? 1 : 0;
+            // right.data.adjacent += front.data.bomb ? 1 : 0;
+            right.data.adjacent.push(front.data);
+            front.data.adjacent.push(right.data);
         }
     }
 }
@@ -248,16 +278,22 @@ function placeTopRight(top_tile, right_tile) {
         let right = (i + 1 < game_size) ? right_tile.children[(game_size*(i+1)) + (game_size-1)] : null;
 
         if (bot) {
-            top.data.adjacent += bot.data.bomb ? 1 : 0;
-            bot.data.adjacent += top.data.bomb? 1 : 0;
+            // top.data.adjacent += bot.data.bomb ? 1 : 0;
+            // bot.data.adjacent += top.data.bomb? 1 : 0;
+            top.data.adjacent.push(bot.data);
+            bot.data.adjacent.push(top.data);
         }
         if (left){
-            top.data.adjacent += left.data.bomb ? 1 : 0;
-            left.data.adjacent += top.data.bomb ? 1 : 0;
+            // top.data.adjacent += left.data.bomb ? 1 : 0;
+            // left.data.adjacent += top.data.bomb ? 1 : 0;
+            top.data.adjacent.push(left.data);
+            left.data.adjacent.push(top.data);
         }
         if (right) {
-            top.data.adjacent += right.data.bomb ? 1 : 0;
-            right.data.adjacent += top.data.bomb ? 1 : 0;
+            // top.data.adjacent += right.data.bomb ? 1 : 0;
+            // right.data.adjacent += top.data.bomb ? 1 : 0;
+            top.data.adjacent.push(right.data);
+            right.data.adjacent.push(top.data);
         }
     }
 }
@@ -272,16 +308,22 @@ function placeTopLeft(top_tile, left_tile) {
         let right = (i + 1 < game_size) ? left_tile.children[((game_size-2-i)*game_size) + (game_size-1)] : null;
 
         if (bot) {
-            top.data.adjacent += bot.data.bomb ? 1 : 0;
-            bot.data.adjacent += top.data.bomb? 1 : 0;
+            // top.data.adjacent += bot.data.bomb ? 1 : 0;
+            // bot.data.adjacent += top.data.bomb? 1 : 0;
+            top.data.adjacent.push(bot.data);
+            bot.data.adjacent.push(top.data);
         }
         if (left){
-            top.data.adjacent += left.data.bomb ? 1 : 0;
-            left.data.adjacent += top.data.bomb ? 1 : 0;
+            // top.data.adjacent += left.data.bomb ? 1 : 0;
+            // left.data.adjacent += top.data.bomb ? 1 : 0;
+            top.data.adjacent.push(left.data);
+            left.data.adjacent.push(top.data);
         }
         if (right) {
-            top.data.adjacent += right.data.bomb ? 1 : 0;
-            right.data.adjacent += top.data.bomb ? 1 : 0;
+            // top.data.adjacent += right.data.bomb ? 1 : 0;
+            // right.data.adjacent += top.data.bomb ? 1 : 0;
+            top.data.adjacent.push(right.data);
+            right.data.adjacent.push(top.data);
         }
     }
 }
@@ -296,16 +338,22 @@ function placeBotRight(bot_tile, right_tile) {
         let right = (i + 1 < game_size) ? right_tile.children[game_size*(i+1)] : null;
 
         if (top) {
-            bot.data.adjacent += top.data.bomb ? 1 : 0;
-            top.data.adjacent += bot.data.bomb? 1 : 0;
+            // bot.data.adjacent += top.data.bomb ? 1 : 0;
+            // top.data.adjacent += bot.data.bomb? 1 : 0;
+            bot.data.adjacent.push(top.data);
+            top.data.adjacent.push(bot.data);
         }
         if (left){
-            bot.data.adjacent += left.data.bomb ? 1 : 0;
-            left.data.adjacent += bot.data.bomb ? 1 : 0;
+            // bot.data.adjacent += left.data.bomb ? 1 : 0;
+            // left.data.adjacent += bot.data.bomb ? 1 : 0;
+            bot.data.adjacent.push(left.data);
+            left.data.adjacent.push(bot.data);
         }
         if (right) {
-            bot.data.adjacent += right.data.bomb ? 1 : 0;
-            right.data.adjacent += bot.data.bomb ? 1 : 0;
+            // bot.data.adjacent += right.data.bomb ? 1 : 0;
+            // right.data.adjacent += bot.data.bomb ? 1 : 0;
+            bot.data.adjacent.push(right.data);
+            right.data.adjacent.push(bot.data);
         }
     }
 }
@@ -320,16 +368,22 @@ function placeBotLeft(bot_tile, left_tile) {
         let right = (i + 1 < game_size) ? left_tile.children[game_size*(i+1)] : null;
 
         if (top) {
-            bot.data.adjacent += top.data.bomb ? 1 : 0;
-            top.data.adjacent += bot.data.bomb? 1 : 0;
+            // bot.data.adjacent += top.data.bomb ? 1 : 0;
+            // top.data.adjacent += bot.data.bomb? 1 : 0;
+            bot.data.adjacent.push(top.data);
+            top.data.adjacent.push(bot.data);
         }
         if (left){
-            bot.data.adjacent += left.data.bomb ? 1 : 0;
-            left.data.adjacent += bot.data.bomb ? 1 : 0;
+            // bot.data.adjacent += left.data.bomb ? 1 : 0;
+            // left.data.adjacent += bot.data.bomb ? 1 : 0;
+            bot.data.adjacent.push(left.data);
+            left.data.adjacent.push(bot.data);
         }
         if (right) {
-            bot.data.adjacent += right.data.bomb ? 1 : 0;
-            right.data.adjacent += bot.data.bomb ? 1 : 0;
+            // bot.data.adjacent += right.data.bomb ? 1 : 0;
+            // right.data.adjacent += bot.data.bomb ? 1 : 0;
+            bot.data.adjacent.push(right.data);
+            right.data.adjacent.push(bot.data);
         }
     }
 }
@@ -359,11 +413,32 @@ function generateTiles() {
     placeBotRight(bottom, right);
     placeBotLeft(bottom, left);
 
-
-    // placeTileSetBottom(bottom, front);
+    calcBombs(front);
 
     tiles.push(front, left, right, back, top, bottom);
     tiles.forEach(tile => game.add(tile));
+}
+
+function calcBombs(tile_group) {
+    let start_tile = tile_group.children[0].data;
+    let queue = [start_tile];
+    let visited = new Set();
+
+    while (queue.length > 0) {
+        let tile = queue.shift();
+        if (visited.has(tile))
+            continue;
+
+        visited.add(tile);
+
+        for (let i = 0; i < tile.adjacent.length; i++) {
+            let adj = tile.adjacent[i];
+            if (adj.bomb) {
+                tile.bomb_adj_count++;
+            }
+            queue.push(adj);
+        }
+    }
 }
 
 function onPointerMove( event ) {
@@ -406,33 +481,52 @@ function removeTile(e) {
     //
     // ripple reveal
     let queue = [intersected.data];
-    let played = false;
+    let visited = new Set();
     while (queue.length > 0) {
-        if (!played) {
-            sound.play();
-            played = true;
-        }
         let tile = queue.shift();
+
+        if (visited.has(tile))
+            continue;
+
+        visited.add(tile);
         tile.revealed = true;
-        if (tile.adjacent === 0) {
-            for (let x = -1; x <= 1; x++) {
-                let row = tile.x + x;
-                if (row < 0 || row >= game_size) {
-                    continue;
-                }
-                for (let y = -1; y <= 1; y++) {
-                    let col = tile.y + y;
-                    if (col < 0 || col >= game_size) {
-                        continue;
-                    }
-                    let neighbor = board[row][col];
-                    if (!neighbor.revealed) {
-                        queue.push(neighbor);
-                    }
-                }
+
+        if (tile.bomb_adj_count === 0) {
+            for (let i = 0; i < tile.adjacent.length; i++) {
+                let adj = tile.adjacent[i];
+                queue.push(adj);
             }
         }
     }
+
+    // let queue = [intersected.data];
+    // let played = false;
+    // while (queue.length > 0) {
+    //     if (!played) {
+    //         sound.play();
+    //         played = true;
+    //     }
+    //     let tile = queue.shift();
+    //     tile.revealed = true;
+    //     if (tile.adjacent === 0) {
+    //         for (let x = -1; x <= 1; x++) {
+    //             let row = tile.x + x;
+    //             if (row < 0 || row >= game_size) {
+    //                 continue;
+    //             }
+    //             for (let y = -1; y <= 1; y++) {
+    //                 let col = tile.y + y;
+    //                 if (col < 0 || col >= game_size) {
+    //                     continue;
+    //                 }
+    //                 let neighbor = board[row][col];
+    //                 if (!neighbor.revealed) {
+    //                     queue.push(neighbor);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
 }
 

@@ -12,42 +12,34 @@ export function generate_game() {
                 bomb: is_bomb,
                 revealed: false,
                 flagged: false,
-                adjacent: 0,
+                adjacent: [],
                 x: i,
-                y: j
+                y: j,
+                bomb_adj_count: 0
             };
             row.push(tile);
         }
         game.push(row);
     }
 
-    // Calculate adjacent bombs
+    // link adjacent tiles
     for (let i = 0; i < game_size; i++) {
         for (let j = 0; j < game_size; j++) {
             let tile = game[i][j];
-            if (tile.bomb) {
-                continue;
-            }
-
-            let adjacent = 0;
+            let adjacent = [];
             for (let x = -1; x <= 1; x++) {
-                let row = i + x;
-                if (row < 0 || row >= game_size) {
-                    continue;
-                }
-                for (let y = -1; y <= 1; y++) {
-                    let col = j + y;
-                    if (col < 0 || col >= game_size) {
-                        continue;
-                    }
-                    if (game[row][col].bomb) {
-                        adjacent++;
-                    }
+                for (let y = -1; y <= 1; y++){
+                    if (x == 0 && y == 0) continue;
+                    let x_pos = i + x;
+                    let y_pos = j + y;
+                    if (x_pos < 0 || x_pos >= game_size || y_pos < 0 || y_pos >= game_size) continue;
+                    adjacent.push(game[x_pos][y_pos]);
                 }
             }
             tile.adjacent = adjacent;
         }
     }
+
 
     return game;
 }
