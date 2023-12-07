@@ -36,6 +36,12 @@ var skydome;
 export let game_size = 10;
 var tiles = [];
 
+var timer_started = false;
+var start_time = Date.now();
+
+let total_bombs = 0;
+let total_flags = 0;
+
 const textures = [];
 
 function createTileGroup(rx, ry, rz) {
@@ -431,6 +437,11 @@ function calcBombs(tile_group) {
 
         visited.add(tile);
 
+        if (tile.bomb) {
+            total_bombs++;
+            total_flags++;
+        }
+
         for (let i = 0; i < tile.adjacent.length; i++) {
             let adj = tile.adjacent[i];
             if (adj.bomb) {
@@ -459,6 +470,11 @@ function removeTile(e) {
     e.preventDefault();
     if (!intersected || !intersected.data || intersected.data.revealed)
         return;
+
+    if (!timer_started) {
+        timer_started = true;
+        start_time = Date.now();
+    }
 
     intersected.data.revealed = true;
     if (intersected.data.bomb) {
@@ -532,8 +548,19 @@ function removeTile(e) {
 
 function toggleFlag(e) {
     e.preventDefault();
-    if (intersected)
+    if (total_flags <= 0) {
+        return;
+    }
+
+    if (intersected) {
+        if (intersected.data.flagged) {
+            total_flags++;
+        } else {
+            total_flags--;
+        }
+
         intersected.data.flagged = !intersected.data.flagged;
+    }
 }
 
 function rotateGame(e) {
@@ -596,6 +623,16 @@ function animate() {
         intersected = intersects[0].object;
         intersected.material.color.setHex( 0xfadadd );
     }
+
+    // update timer every second in seconds
+    let timer = document.getElementById("time_value");
+    if (timer_started) {
+        let elapsed_time = Math.floor((Date.now() - start_time) / 1000);
+        timer.innerHTML = elapsed_time;
+    }
+
+    let flags = document.getElementById("flags_value");
+    flags.innerHTML = total_flags;
 
     tiles.forEach(tile => colorTiles(tile));
 
