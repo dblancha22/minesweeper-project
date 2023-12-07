@@ -87,7 +87,7 @@ function colorTiles(tile_group) {
         }
 
         if (tile.data.revealed) {
-            tile.material.map = textures[tile.data.adjacent];
+            tile.material.map = textures[tile.data.bomb_adj_count];
         }
         if (tile.data.flagged) {
             tile.material.map = textures[10];
@@ -413,11 +413,32 @@ function generateTiles() {
     placeBotRight(bottom, right);
     placeBotLeft(bottom, left);
 
-
-    // placeTileSetBottom(bottom, front);
+    calcBombs(front);
 
     tiles.push(front, left, right, back, top, bottom);
     tiles.forEach(tile => game.add(tile));
+}
+
+function calcBombs(tile_group) {
+    let start_tile = tile_group.children[0].data;
+    let queue = [start_tile];
+    let visited = new Set();
+
+    while (queue.length > 0) {
+        let tile = queue.shift();
+        if (visited.has(tile))
+            continue;
+
+        visited.add(tile);
+
+        for (let i = 0; i < tile.adjacent.length; i++) {
+            let adj = tile.adjacent[i];
+            if (adj.bomb) {
+                tile.bomb_adj_count++;
+            }
+            queue.push(adj);
+        }
+    }
 }
 
 function onPointerMove( event ) {
@@ -460,33 +481,52 @@ function removeTile(e) {
     //
     // ripple reveal
     let queue = [intersected.data];
-    let played = false;
+    let visited = new Set();
     while (queue.length > 0) {
-        if (!played) {
-            sound.play();
-            played = true;
-        }
         let tile = queue.shift();
+
+        if (visited.has(tile))
+            continue;
+
+        visited.add(tile);
         tile.revealed = true;
-        if (tile.adjacent === 0) {
-            for (let x = -1; x <= 1; x++) {
-                let row = tile.x + x;
-                if (row < 0 || row >= game_size) {
-                    continue;
-                }
-                for (let y = -1; y <= 1; y++) {
-                    let col = tile.y + y;
-                    if (col < 0 || col >= game_size) {
-                        continue;
-                    }
-                    let neighbor = board[row][col];
-                    if (!neighbor.revealed) {
-                        queue.push(neighbor);
-                    }
-                }
+
+        if (tile.bomb_adj_count === 0) {
+            for (let i = 0; i < tile.adjacent.length; i++) {
+                let adj = tile.adjacent[i];
+                queue.push(adj);
             }
         }
     }
+
+    // let queue = [intersected.data];
+    // let played = false;
+    // while (queue.length > 0) {
+    //     if (!played) {
+    //         sound.play();
+    //         played = true;
+    //     }
+    //     let tile = queue.shift();
+    //     tile.revealed = true;
+    //     if (tile.adjacent === 0) {
+    //         for (let x = -1; x <= 1; x++) {
+    //             let row = tile.x + x;
+    //             if (row < 0 || row >= game_size) {
+    //                 continue;
+    //             }
+    //             for (let y = -1; y <= 1; y++) {
+    //                 let col = tile.y + y;
+    //                 if (col < 0 || col >= game_size) {
+    //                     continue;
+    //                 }
+    //                 let neighbor = board[row][col];
+    //                 if (!neighbor.revealed) {
+    //                     queue.push(neighbor);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
 }
 
