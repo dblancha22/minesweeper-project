@@ -620,6 +620,10 @@ document.getElementById("difficulty").addEventListener("change", function() {
     restart_game();
 });
 
+document.getElementById("restart").addEventListener("click", function() {
+    restart_game();
+});
+
 loadTextures();
 setupGame();
 animate();

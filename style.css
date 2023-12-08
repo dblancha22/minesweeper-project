@@ -42,3 +42,16 @@ body {
     font-size: 15px;
     font-weight: 700;
 }
+
+#restart {
+    border-radius: 0.5rem;
+    height: 2rem;
+    border: 1px solid #000;
+    background-color: transparent;
+    color: #fff;
+    width: 100%;
+
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+}
