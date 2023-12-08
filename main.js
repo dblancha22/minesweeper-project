@@ -543,6 +543,7 @@ function loadTextures() {
 function setupGame() {
     game_started = false;
     timer_started = false;
+    total_flags = 0;
     tiles = [];
     game = new THREE.Group();
     remaining_tiles = game_size * game_size * 6;
